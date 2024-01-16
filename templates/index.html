@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    <!-- Update the href to use Flask's url_for function for the CSS file -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="chat-container">
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Ask me anything...">
+            <button type="submit" id="submit-query">Send</button>
+        </form>
+        <div id="chat-output"></div>
+    </div>
+    <!-- Update the src to use Flask's url_for function for the JavaScript file -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
