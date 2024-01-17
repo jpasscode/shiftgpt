@@ -1,5 +1,4 @@
 import os
-import re
 import requests
 from flask import Flask, jsonify, request, render_template
 
@@ -8,7 +7,7 @@ openai_api_key = os.environ.get("OPENAI_API_KEY")
 
 @app.route("/")
 def index():
-    # This will render 'index.html' from the 'templates' folder
+    # Render 'index.html' from the 'templates' folder
     return render_template("index.html")
 
 @app.route("/ask-gpt", methods=["POST"])
@@ -27,23 +26,7 @@ def ask_gpt():
 
         if response.status_code == 200:
             gpt_response_text = response.json()['choices'][0]['text'].strip()
-            sections_pattern = re.compile(r'\n\d+\.\s+')
-            sections = sections_pattern.split(gpt_response_text)
-            sections = [section.strip() for section in sections if section.strip()]
-
-            structured_response = []
-            for section in sections:
-                bullet_points_pattern = re.compile(r'\n•\s+')
-                bullet_points = bullet_points_pattern.split(section)
-                bullet_points = [point.strip() for point in bullet_points if point.strip()]
-
-                structured_section = {
-                    "section": bullet_points[0] if len(bullet_points) == 1 else '',
-                    "bullet_points": bullet_points[1:] if len(bullet_points) > 1 else []
-                }
-                structured_response.append(structured_section)
-
-            return jsonify(structured_response)
+            return jsonify({"response": gpt_response_text})
         else:
             return jsonify({"error": "API request failed", "status_code": response.status_code}), 500
 

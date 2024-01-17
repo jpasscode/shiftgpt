@@ -16,28 +16,26 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json()) // Convert the response to JSON
         .then(data => {
-            const responseDiv = document.getElementById('chat-output');
-            responseDiv.innerHTML = ''; // Clear previous content
+            const chatOutput = document.getElementById('chat-output');
+            chatOutput.innerHTML = ''; // Clear previous content
 
-            data.forEach((structuredSection, index) => {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.innerHTML = `<strong>Section ${index + 1}:</strong> ${structuredSection.section}`;
-                responseDiv.appendChild(sectionDiv);
+      if (data.response) {
+        // Display the response from OpenAI's API
+        const responseDiv = document.createElement('div');
+        responseDiv.textContent = data.response;
+        chatOutput.appendChild(responseDiv);
+      } else if (data.error) {
+        // Display any errors that occurred
+        chatOutput.textContent = `Error: ${data.error}`;
+      }
 
-                if (structuredSection.bullet_points.length > 0) {
-                    const ul = document.createElement('ul');
-                    structuredSection.bullet_points.forEach(bullet => {
-                        const li = document.createElement('li');
-                        li.textContent = bullet;
-                        ul.appendChild(li);
-                    });
-                    sectionDiv.appendChild(ul);
-                }
-            });
-
-            // Clear the input field after processing the response
-            document.getElementById('user-input').value = '';
-        })
+      // Clear the input field
+      document.getElementById('user-input').value = '';
+      })
       .catch(error => {
-          console.error('Error:', error);
+      console.error('Error:', error);
+      const chatOutput = document.getElementById('chat-output');
+      chatOutput.textContent = `Error: ${error.message}`;
+      });
+      });
       });
