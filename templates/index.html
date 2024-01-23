@@ -6,12 +6,18 @@
 </head>
 <body>
     <div id="chat-container">
+        <div id="chat-output"></div>
         <form id="chat-form">
             <input type="text" id="user-input" placeholder="Ask me anything...">
             <button type="submit" id="submit-query">Send</button>
         </form>
-        <div id="chat-output"></div>
     </div>
+
+    <!-- Loading animation container -->
+    <div id="loading" class="loading-container" style="display: none;">
+        <div class="loader"></div>
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -26,7 +26,7 @@ def ask_gpt():
                 "model": "gpt-3.5-turbo",
                 "messages": [{"role": "user", "content": user_input}]
             },
-            timeout=10
+            timeout=60
         )
 
         print(f"OpenAI API response status: {response.status_code}")
