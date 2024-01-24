@@ -1,3 +1,105 @@
+/* Styles for the chat windows container */
+#chat-windows-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+/* Styles for individual chat windows */
+.chat-window {
+    position: relative;
+    border: 1px solid #e1e1e1;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 300px; /* Adjust width as needed */
+    height: 400px; /* Adjust height as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styles for the chat output area */
+.chat-window .chat-output {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 10px;
+    background-color: #f8f9fa;
+    min-height: 70%;
+}
+
+/* Styles for chat messages */
+.chat-window .message {
+    /* Your existing styles for messages */
+}
+
+/* Styles for the chat form at the bottom of each chat window */
+.chat-window .chat-form {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #e1e1e1;
+}
+
+/* Styles for the input field in chat form */
+.chat-window .user-input {
+    flex-grow: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+/* Styles for the send button in chat form */
+.chat-window .submit-query {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* Button to create new chat window */
+#new-chat-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+/* Loading animation styles */
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+}
+
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/*code from before */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -6,6 +108,7 @@ body {
 }
 
 #chat-container {
+    position: relative;
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
@@ -70,16 +173,16 @@ body {
 }
 
 .loading-container {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
+    display: none; /* Hidden by default */
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
 }
 
 .loader {

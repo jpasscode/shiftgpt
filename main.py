@@ -1,21 +1,30 @@
+from flask import Flask, jsonify, request, render_template, session
 import os
 import requests
-from flask import Flask, jsonify, request, render_template
+import uuid
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Set a secret key for session management
 openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+# In-memory storage for chat histories (For demo purposes. Use a database for production)
+chat_histories = {}
 
 @app.route("/", methods=["GET"])
 def index():
-    print("Index page was accessed.")
-    return render_template('index.html')  # Render the index.html template
+    session_id = str(uuid.uuid4())  # Generate a unique session ID
+    session['session_id'] = session_id  # Store session ID in Flask session
+    chat_histories[session_id] = []  # Initialize chat history for this session
+    return render_template('index.html', session_id=session_id)
 
 @app.route("/ask-gpt", methods=["POST"])
 def ask_gpt():
-    print("Received a request to /ask-gpt")
+    session_id = session.get('session_id')
+    if not session_id or session_id not in chat_histories:
+        return jsonify({"error": "Invalid session"}), 400
+
     user_input = request.json.get('query')
     if not user_input:
-        print("No query provided in the request.")
         return jsonify({"error": "No query provided"}), 400
 
     try:
@@ -29,19 +38,16 @@ def ask_gpt():
             timeout=60
         )
 
-        print(f"OpenAI API response status: {response.status_code}")
         if response.status_code == 200:
             gpt_response = response.json()['choices'][0]['message']['content'].strip()
+            chat_histories[session_id].append((user_input, gpt_response))  # Store in chat history
             return jsonify({"response": gpt_response})
         else:
             error_details = response.json() if response.content else 'No response content'
-            print(f"API request failed: {error_details}")
             return jsonify({"error": "API request failed", "status_code": response.status_code, "details": error_details}), 500
 
     except requests.exceptions.RequestException as e:
-        print(f"Network error: {str(e)}")
         return jsonify({"error": "Network error", "details": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
